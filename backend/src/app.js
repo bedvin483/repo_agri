@@ -1,7 +1,11 @@
 const express = require('express');
-const vendeurController = require('./controllers/vendeur.controllers');
+const cors = require('cors');
 const vendeurRouter = require('./routes/vendeur.routes');
 app = express();
+
+app.use(cors());
+app.use(express.json())
+app.use(express.urlencoded({extended:false}));
 
 app.use('/api/vendeurs',vendeurRouter);
 

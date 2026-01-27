@@ -1,4 +1,5 @@
 const vendeurService = require('../services/vendeur.service');
+const psw = require('../utils/psw.manage');
 
 const getAllVendeurs = async (req,res)=>{
     try{
@@ -12,7 +13,8 @@ const getAllVendeurs = async (req,res)=>{
 
 const createVendeur = async (req,res)=>{
     try{
-        vendeur = req.body;
+        let vendeur = req.body;
+        vendeur.mdp_vend = await psw.chiffrer(vendeur.mdp_vend);
         await vendeurService.createOne(vendeur);
         return res.json({'message': 'vendeur ajouté'});
     }
@@ -22,9 +24,10 @@ const createVendeur = async (req,res)=>{
 };
 
 const changeInfoVendeur = async (req,res)=>{    
-    let new_info = req.body;
-    let id = parseInt(req.params.id);
     try{
+        let new_info = req.body;
+        let id = parseInt(req.params.id);
+        new_info.mdp_vend = await psw.chiffrer(new_info.mdp_vend);
         await vendeurService.changeInfo(id,new_info);
         return res.json({'message': 'vendeur modifié'});
     }
