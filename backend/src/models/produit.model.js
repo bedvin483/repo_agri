@@ -4,9 +4,15 @@ const req = require('../utils/sql.request');
 const table = 'produit';
 const columns = ['nom_prod'];
 const id_table = 'id_prod';
+const select_columns = 'nom_prod';
 
 const findAll = async ()=>{
     const [rows] = await req.Select(db,table);
+    return rows;
+}
+
+const findByName = async (value)=>{
+    const [rows] = await req.SelectByColumn(db,table,select_columns,value);
     return rows;
 }
 
@@ -22,4 +28,12 @@ const remove = async (id)=>{
     await req.Delete(db,table,id_table,id);
 }
 
-module.exports = { findAll, create, change, remove };
+module.exports = { findAll, findByName, create, change, remove };
+
+/*const f = async (value)=>{
+    const res = await findByName(value);
+    console.log(res);
+}
+
+f('Orange');
+f('mang');*/

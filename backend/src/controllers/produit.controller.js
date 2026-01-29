@@ -10,6 +10,17 @@ const getAllProduit = async (req,res)=>{
     }
 }
 
+const getProduitByName = async (req,res)=>{
+    try {
+        let name = req.params.name;
+        const produit = await produitService.getByName(name);
+        console.log(produit);
+        return res.json(produit);
+    } catch (err) {
+        return res.status(500).json({'erreur': err});
+    }
+}
+
 const createProduit = async (req,res)=>{
     try {
         let produit = req.body;
@@ -41,4 +52,4 @@ const deleteProduit = async (req,res)=>{
     }
 }
 
-module.exports = { getAllProduit, createProduit, changeInfoProduit, deleteProduit };
+module.exports = { getAllProduit, getProduitByName, createProduit, changeInfoProduit, deleteProduit };

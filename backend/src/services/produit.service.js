@@ -4,6 +4,10 @@ const getAll = async ()=>{
     return await produitModel.findAll();
 }
 
+const getByName = async (name)=>{
+    return await produitModel.findByName(name);
+}
+
 const createOne = async (produit)=>{
     await produitModel.create(produit);
 }
@@ -16,4 +20,4 @@ const deleteOne = async (id)=>{
     await produitModel.remove(id);
 }
 
-module.exports = { getAll, createOne, changeInfo, deleteOne };
+module.exports = { getAll, getByName, createOne, changeInfo, deleteOne };
