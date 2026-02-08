@@ -1,10 +1,22 @@
 
 const Select = (db,table)=> db.query(`select * from ${table}`);
 
-const SelectByColumn = (db,table,columns,value) => db.query(`select * from ${table} where ${columns}=?`,[value]);
+const SelectByColumn = (db,table,column='',value='') => db.query(`select * from ${table} where ${column}=?`,[value]);
 
-const Delete = (db,table,id_c,id) => db.query(`delete from ${table} where ${id_c}=?`,[id]);
+const Delete = (db,table,id_c=0,id=0) => db.query(`delete from ${table} where ${id_c}=?`,[id]);
 
+const DeleteByColumns = (db,table,id_table=[],id=[])=>{
+    let condition = ``;
+    for (let i=0;i<id_table.length;i++){
+        if (i < id_table.length - 1){
+            condition = condition + `${id_table[i]}=? and `;
+        }
+        else{
+            condition = condition + `${id_table[i]}=?`;
+        }
+    }
+    db.query(`delete from ${table} where ${condition}`,id);
+}
 const Insert = (db,table,columns=[],values={})=>{
     let val_len = 0;
     for (elt in values) {val_len = val_len + 1}
@@ -29,7 +41,7 @@ const Insert = (db,table,columns=[],values={})=>{
     db.query(cmd,list_value);
 }
 
-const Update = (db,table,columns=[],id_c,id,values={})=>{
+const Update = (db,table,columns=[],id_c=0,id=0,values={})=>{
     let list_value = to_list(values);
     if (columns.length != list_value.length){
         throw new Error('il doit y avoir autant de colonnes que de valeurs');
@@ -76,7 +88,7 @@ const UpdateBycolumns = (db,table,columns=[],id_c=[],id=[],values={})=>{
             cmd = cmd + `${columns[index]}=?, `;
         }
         else{
-            cmd = cmd + `${columns[index]}=? where ${condition(id_c)}=?`;
+            cmd = cmd + `${columns[index]}=? where ${condition(id_c)}`;
         }
     }
     list_value = [...list_value,...id];
@@ -84,8 +96,8 @@ const UpdateBycolumns = (db,table,columns=[],id_c=[],id=[],values={})=>{
 
 }
 //let val = {nom:'BG',tel:'tel',mdp:'mdp',ville:'ville'}
-//Update('db','vendeur',['nom_vend','tel_vend','mdp_vend','ville_vend'],'id_vend',4,val)
-module.exports = {Select, SelectByColumn, Delete, Insert, Update, UpdateBycolumns};
+//DeleteByColumns('db','vendeur',['id_vend','id_produit'],['3',4])
+module.exports = {Select, SelectByColumn, Delete, DeleteByColumns, Insert, Update, UpdateBycolumns};
 
 function to_list(dict={}){
     let list = [];

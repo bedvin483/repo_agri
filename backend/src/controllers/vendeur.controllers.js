@@ -15,8 +15,13 @@ const createVendeur = async (req,res)=>{
     try{
         let vendeur = req.body;
         vendeur.mdp_vend = await psw.chiffrer(vendeur.mdp_vend);
-        await vendeurService.createOne(vendeur);
-        return res.json({'message': 'vendeur ajouté'});
+        const res = await vendeurService.createOne(vendeur);
+        if (res == []){
+            return res.json({'message': 'Le nom du vendeur doit être unique'});
+        }
+        else{
+            return res.json({'message': 'vendeur ajouté'});
+        }
     }
     catch (err){
         return res.status(500).json({'erreur': err});

@@ -9,6 +9,11 @@ const findAll = async ()=>{
     return rows
 }
 
+const findByName = async (nom_vend='')=>{
+    const [rows] = await req.SelectByColumn(db,table,'nom_vend',nom_vend);
+    return rows;
+}
+
 const create = async (vendeur)=>{
     //let {nom_vend,tel_vend,mdp_vend,ville_vend} = vendeur;
     //let reqSQL = "insert into vendeur(nom_vend,tel_vend,mdp_vend,ville_vend) values(?,?,?,?)";
@@ -24,4 +29,4 @@ const remove = async (id)=>{
     await req.Delete(db,table,id_table,id);
 };
 
-module.exports = {findAll, create, change, remove}
+module.exports = {findAll, findByName, create, change, remove}

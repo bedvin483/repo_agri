@@ -11,20 +11,20 @@ const findAll = async ()=>{
     return rows;
 }
 
-const findByName = async (value)=>{
+const findByName = async (value='')=>{
     const [rows] = await req.SelectByColumn(db,table,select_columns,value);
     return rows;
 }
 
-const create = async (produit)=>{
+const create = async (produit={})=>{
     await req.Insert(db,table,columns,produit);
 }
 
-const change = async (id,new_produit)=>{
+const change = async (id=0,new_produit={})=>{
     await req.Update(db,table,columns,id_table,id,new_produit);
 }
 
-const remove = async (id)=>{
+const remove = async (id=0)=>{
     await req.Delete(db,table,id_table,id);
 }
 
