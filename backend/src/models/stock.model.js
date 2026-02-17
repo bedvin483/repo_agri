@@ -30,5 +30,9 @@ const remove = async (id=[]) => {
     await req.DeleteByColumns(db,table,id_table,id);
 }
 
+const removeByVend = async (id_vend=0)=>{
+    await req.Delete(db,table,'id_vend',id_vend);
+}
 
-module.exports = { findAll, findByVend, create, change, remove };
+
+module.exports = { findAll, findByVend, create, change, remove, removeByVend };

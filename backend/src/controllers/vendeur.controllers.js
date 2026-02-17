@@ -1,10 +1,9 @@
 const vendeurService = require('../services/vendeur.service');
-const psw = require('../utils/psw.manage');
 
 const getAllVendeurs = async (req,res)=>{
     try{
         const vendeurs = await vendeurService.getAll();
-        return res.json(vendeurs);
+        return res.statu(200).json(vendeurs);
     }
     catch (err) {
         return res.status(500).json({'erreur': err.message});
@@ -14,27 +13,21 @@ const getAllVendeurs = async (req,res)=>{
 const createVendeur = async (req,res)=>{
     try{
         let vendeur = req.body;
-        vendeur.mdp_vend = await psw.chiffrer(vendeur.mdp_vend);
-        const res = await vendeurService.createOne(vendeur);
-        if (res == []){
-            return res.json({'message': 'Le nom du vendeur doit être unique'});
-        }
-        else{
-            return res.json({'message': 'vendeur ajouté'});
-        }
+        await vendeurService.createOne(vendeur);
+        return res.status(201).json({'message': 'vendeur ajouté'});
     }
     catch (err){
-        return res.status(500).json({'erreur': err});
+        console.log(err);
+        return res.status(err.status || 500).json({'erreur': err.message});
     }
 };
 
-const changeInfoVendeur = async (req,res)=>{    
+const changeInfoVendeur = async (req,res)=>{
     try{
         let new_info = req.body;
         let id = parseInt(req.params.id);
-        new_info.mdp_vend = await psw.chiffrer(new_info.mdp_vend);
         await vendeurService.changeInfo(id,new_info);
-        return res.json({'message': 'vendeur modifié'});
+        return res.status(200).json({'message': 'vendeur modifié'});
     }
     catch (err){
         return res.status(500).json({'erreur': err});
@@ -45,7 +38,7 @@ const deleteVendeur = async (req,res)=>{
     let id = parseInt(req.params.id)
     try{
         await vendeurService.deleteOne(id);
-        return res.json({'message': 'vendeur supprimé'});
+        return res.send(204).send();
     }
     catch (err){
         return res.status(500).json({'erreur': err});

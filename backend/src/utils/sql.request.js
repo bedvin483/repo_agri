@@ -3,7 +3,7 @@ const Select = (db,table)=> db.query(`select * from ${table}`);
 
 const SelectByColumn = (db,table,column='',value='') => db.query(`select * from ${table} where ${column}=?`,[value]);
 
-const Delete = (db,table,id_c=0,id=0) => db.query(`delete from ${table} where ${id_c}=?`,[id]);
+const Delete = (db,table,id_c='',id=0) => db.query(`delete from ${table} where ${id_c}=?`,[id]);
 
 const DeleteByColumns = (db,table,id_table=[],id=[])=>{
     let condition = ``;
@@ -21,7 +21,7 @@ const Insert = (db,table,columns=[],values={})=>{
     let val_len = 0;
     for (elt in values) {val_len = val_len + 1}
     if (columns.length != val_len){
-        throw new Error('il doit y avoir autant de colonnes que de valeurs');
+        throw {status:400,message:'il doit y avoir autant de colonnes que de valeurs'};
     }
     let list_columns = `(`;
     let lenght = columns.length -1
@@ -41,7 +41,7 @@ const Insert = (db,table,columns=[],values={})=>{
     db.query(cmd,list_value);
 }
 
-const Update = (db,table,columns=[],id_c=0,id=0,values={})=>{
+const Update = (db,table,columns=[],id_c='',id=0,values={})=>{
     let list_value = to_list(values);
     if (columns.length != list_value.length){
         throw new Error('il doit y avoir autant de colonnes que de valeurs');

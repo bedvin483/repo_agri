@@ -14,8 +14,6 @@ const createOne = async (new_stock={})=>{
         produit = await produitService.getByName(new_stock['nom_prod']);
         console.log(produit);
     }
-    console.log(produit);
-    console.log([].length);
     new_stock['id_prod'] = parseInt(produit[0]['id_prod']);
     let {id_vend, nom_prod,id_prod, categorie, image_prod,quantite,prix} = new_stock;
     let stock = {id_vend, id_prod, categorie, image_prod,quantite,prix}
@@ -35,4 +33,7 @@ const deleteOne = async (id={})=>{
     await stockModel.remove(id_vend_prod)
 }
 
-module.exports = { getByVend, createOne, changeInfo, deleteOne };
+const deleteByVend = async (id_vend=0)=>{
+    await stockModel.removeByVend(id_vend);
+}
+module.exports = { getByVend, createOne, changeInfo, deleteOne, deleteByVend };
