@@ -61,7 +61,7 @@ const Update = (db,table,columns=[],id_c='',id=0,values={})=>{
 
 }
 
-const UpdateBycolumns = (db,table,columns=[],id_c=[],id=[],values={})=>{
+const UpdateBycolumns = (db,table,columns=[],id_c=[],id_value=[],values={})=>{
     const condition = (col=[])=>{
         if (col.length==1){
             return `${col[0]}=?`;
@@ -91,7 +91,7 @@ const UpdateBycolumns = (db,table,columns=[],id_c=[],id=[],values={})=>{
             cmd = cmd + `${columns[index]}=? where ${condition(id_c)}`;
         }
     }
-    list_value = [...list_value,...id];
+    list_value = [...list_value,...id_value];
     db.query(cmd,list_value);
 
 }

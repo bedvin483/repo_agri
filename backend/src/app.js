@@ -4,6 +4,7 @@ const vendeurRoute = require('./routes/vendeur.routes');
 const acheteurRoute = require('./routes/acheteur.route');
 const produitRoute = require('./routes/produit.route');
 const stockRoute = require('./routes/stock.route');
+const commandeRoute = require('./routes/commande.route');
 app = express();
 
 app.use(cors());
@@ -14,5 +15,6 @@ app.use('/api/vendeurs',vendeurRoute);
 app.use('/api/acheteur',acheteurRoute);
 app.use('/api/produits',produitRoute);
 app.use('/api/stock',stockRoute);
+app.use('/api/commande',commandeRoute);
 
 module.exports = app;

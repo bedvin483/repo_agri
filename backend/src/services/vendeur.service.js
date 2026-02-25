@@ -1,6 +1,7 @@
 const vendeurModel = require('../models/vendeur.model');
 const psw = require('../utils/psw.manage');
 const stockService = require('./stock.service');
+const commandeService = require('./commande.service');
 
 const getAll = async ()=>{
     return await vendeurModel.findAll()
@@ -33,6 +34,7 @@ const changeInfo = async (id=0,new_info={})=>{
 
 const deleteOne = async (id_vend=0)=>{
     await stockService.deleteByVend(id_vend);
+    await commandeService.deleteByVend(id_vend)
     await vendeurModel.remove(id_vend);
 };
 

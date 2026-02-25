@@ -1,5 +1,6 @@
 const acheteurModel = require('../models/acheteur.model');
 const psw = require('../utils/psw.manage');
+const commandeService = require('./commande.service');
 
 const getAll = async ()=>{
     return await acheteurModel.findAll()
@@ -29,7 +30,8 @@ const changeInfo = async (id=0,new_info={})=>{
     await acheteurModel.change(id,new_info)
 };
 
-const deleteOne = async (id)=>{
+const deleteOne = async (id=0)=>{
+    await commandeService.deleteByAch(id);
     await acheteurModel.remove(id);
 };
 
