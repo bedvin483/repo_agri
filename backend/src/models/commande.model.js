@@ -3,7 +3,7 @@ const req = require('../utils/sql.request');
 
 const table = 'commande';
 const views = 'liste_commande'
-const columns = ['id_vend','id_ach','dates','status'];
+const columns = ['id_vend','id_ach','dates','statut'];
 const id_table = 'id_cmd';
 const select_column = 'id_vend';
 const id_fk_key = ['id_vend','id_ach'];
@@ -14,7 +14,7 @@ const findByVend = async (id_vend=0)=>{
 };
 
 const findByAch = async (id_ach=0)=>{
-    const [rows] = await req.SelectByColumn(db,views,'id_ach',id_vend);
+    const [rows] = await req.SelectByColumn(db,views,'id_ach',id_ach);
     return rows;
 };
 

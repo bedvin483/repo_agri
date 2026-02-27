@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/vend/:id',commandeController.getCommandeByVend);
 router.get('/ach/:id',commandeController.getCommandeByAch);
 router.post('/add',commandeController.createCommande);
-router.put('/change',commandeController.changeInfoCommande);
+router.put('/change/:id',commandeController.changeInfoCommande);
 router.delete('/delete/:id',commandeController.deleteCommande);
 
 module.exports = router;
