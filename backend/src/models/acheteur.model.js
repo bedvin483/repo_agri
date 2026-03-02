@@ -15,6 +15,11 @@ const findByName = async (nom_ach='')=>{
     return rows;
 };
 
+const findById = async (id_ach=0)=>{
+    const [rows] = await req.SelectByColumn(db,table,'id_ach',id_ach);
+    return rows;
+};
+
 const create = async (acheteur={})=>{
     await req.Insert(db,table,columns,acheteur);
 };
@@ -27,4 +32,4 @@ const remove = async (id=0)=>{
     await req.Delete(db,table,id_table,id);
 };
 
-module.exports = {findAll, findByName, create, change, remove};
+module.exports = {findAll, findById, findByName, create, change, remove};

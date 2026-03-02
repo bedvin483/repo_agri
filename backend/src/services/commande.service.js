@@ -1,4 +1,6 @@
 const commandeModel = require('../models/commande.model');
+const vendeurService = require('./vendeur.service');
+const acheteurService = require('./acheteur.service');
 
 const getByVend = async (id_vend=0)=>{
     return await commandeModel.findByVend(id_vend);
@@ -10,6 +12,15 @@ const getByAch = async (id_ach=0)=>{
 
 const createOne = async (new_commande={})=>{
     try{
+        let {id_vend, id_ach} = new_commande;
+        let vendeur = await vendeurService.getById(id_vend);
+        let acheteur = await acheteurService.getById(id_ach);
+        if (vendeur.length === 0){
+            throw {status:400,message:'ce vendeur n\'existe pas'};
+        }
+        if (acheteur.length === 0){
+            throw {status:400,message:'cet acheteur n\'existe pas'};
+        }
         await commandeModel.create(new_commande);
     }
     catch(err){

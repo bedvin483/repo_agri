@@ -6,7 +6,27 @@ const getAllVendeurs = async (req,res)=>{
         return res.statu(200).json(vendeurs);
     }
     catch (err) {
-        return res.status(500).json({'erreur': err.message});
+        return res.status(err.status || 500).json({message: err.message || err});
+    }
+};
+
+const getVendeurById = async (req,res)=>{
+    try {
+        const id_vend = req.params.id;
+        const vendeur = await vendeurService.getById(id_vend);
+        return res.status(200).json(vendeur);
+    } catch (err) {
+        return res.status(err.status || 500).json({message: err.message || err});
+    }
+};
+
+const getVendeurByName = async (req,res)=>{
+    try {
+        const {nom_vend} = req.query;
+        const vendeur = await vendeurService.getByName(nom_vend);
+        return res.status(200).json(vendeur);
+    } catch (err) {
+        return res.status(err.status || 500).json({message: err.message || err});
     }
 };
 
@@ -18,7 +38,7 @@ const createVendeur = async (req,res)=>{
     }
     catch (err){
         console.log(err);
-        return res.status(err.status || 500).json({'erreur': err.message});
+        return res.status(err.status || 500).json({erreur: err.message || err});
     }
 };
 
@@ -30,7 +50,7 @@ const changeInfoVendeur = async (req,res)=>{
         return res.status(200).json({'message': 'vendeur modifié'});
     }
     catch (err){
-        return res.status(500).json({'erreur': err});
+        return res.status(err.status || 500).json({message: err.message || err});
     }
 };
 
@@ -41,8 +61,8 @@ const deleteVendeur = async (req,res)=>{
         return res.send(204).send();
     }
     catch (err){
-        return res.status(500).json({'erreur': err});
+        return res.status(err.status || 500).json({message: err.message || err});
     }
 };
 
-module.exports = {getAllVendeurs, createVendeur, changeInfoVendeur, deleteVendeur};
+module.exports = {getAllVendeurs, getVendeurById, getVendeurByName, createVendeur, changeInfoVendeur, deleteVendeur};

@@ -9,6 +9,10 @@ const findAll = async ()=>{
     return rows
 }
 
+const findById = async (id_vend=0)=>{
+    const [rows] = await req.SelectByColumn(db,table,'id_vend',id_vend);
+    return rows;
+}
 const findByName = async (nom_vend='')=>{
     const [rows] = await req.SelectByColumn(db,table,'nom_vend',nom_vend);
     return rows;
@@ -26,4 +30,4 @@ const remove = async (id=0)=>{
     await req.Delete(db,table,id_table,id);
 };
 
-module.exports = {findAll, findByName, create, change, remove}
+module.exports = {findAll, findById, findByName, create, change, remove}
