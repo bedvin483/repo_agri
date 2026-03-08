@@ -14,7 +14,7 @@ const createStock = async (req,res)=>{
     try {
         let new_stock = req.body;
         /*  body must contains id_vend, id_prod, categorie, image_prod,  quantite, prix*/
-        stockService.createOne(new_stock);
+        await stockService.createOne(new_stock);
         return res.status(201).json({'message': 'produit ajouté'});
     } catch (err) {
         return res.status(err.status || 500).json({'erreur': err.message || err});

@@ -6,15 +6,27 @@ const getByVend = async (id_vend=0)=>{
 }
 
 const createOne = async (new_stock={})=>{
+    const vendeurService = require('./vendeur.service');
+    let vend = await vendeurService.getById(new_stock['id_vend']);
+    if (vend.length === 0 ){
+        throw {status:404,message:'vendeur inexistant'};
+    }
     let produit = await produitService.getByName(new_stock['nom_prod']);
     if (produit.length===0){
         let new_produit = new_stock['nom_prod'];
         new_produit = {new_produit};
         produitService.createOne(new_produit);
         produit = await produitService.getByName(new_stock['nom_prod']);
-        console.log(produit);
     }
     new_stock['id_prod'] = parseInt(produit[0]['id_prod']);
+    let stock_vend = await getByVend(vend[0]['id_vend']);
+    if (stock_vend.length > 0){
+        for (let elt of stock_vend){
+            if (elt['id_prod'] == new_stock['id_prod']){
+                throw {status:409,message:'ce vendeur a déjà ce produit en stock'};
+            }
+        }
+    }
     let {id_vend, nom_prod,id_prod, categorie, image_prod,quantite,prix} = new_stock;
     let stock = {id_vend, id_prod, categorie, image_prod,quantite,prix}
     await stockModel.create(stock);

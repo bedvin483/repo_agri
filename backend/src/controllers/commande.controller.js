@@ -7,7 +7,7 @@ const getCommandeByVend = async (req,res)=>{
         return res.status(200).json(commande);
     }
     catch(err){
-        return res.status(err.status || 500).json({erreur: err.message || 'erreur serveur'});
+        return res.status(err.status || 500).json({erreur: err.message || err});
     }
 };
 

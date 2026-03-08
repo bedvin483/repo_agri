@@ -3,8 +3,8 @@ const router = express.Router();
 const stockController = require('../controllers/stock.controller');
 
 router.get('/:id',stockController.getStockByVend);
-router.post('/add',stockController.createStock);
-router.put('/change',stockController.changeInfoStock);
-router.delete('/delete',stockController.deleteStock);
+router.post('/',stockController.createStock);
+router.put('/',stockController.changeInfoStock);
+router.delete('/',stockController.deleteStock);
 
 module.exports = router;

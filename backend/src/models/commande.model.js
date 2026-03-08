@@ -13,6 +13,11 @@ const findByVend = async (id_vend=0)=>{
     return rows;
 };
 
+const findById = async (id_cmd=0)=>{
+    const [rows] = await req.SelectByColumn(db,views,'id_cmd',id_cmd);
+    return rows;
+}
+
 const findByAch = async (id_ach=0)=>{
     const [rows] = await req.SelectByColumn(db,views,'id_ach',id_ach);
     return rows;
@@ -38,4 +43,4 @@ const removeByAch = async (id_ach=0)=>{
     await req.Delete(db,table,'id_ach',id_ach);
 };
 
-module.exports = {findByAch, findByVend, create, change, remove, removeByAch, removeByVend};
+module.exports = {findByAch, findById, findByVend, create, change, remove, removeByAch, removeByVend};
