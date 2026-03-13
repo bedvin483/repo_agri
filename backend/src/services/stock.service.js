@@ -15,7 +15,7 @@ const createOne = async (new_stock={})=>{
     if (produit.length===0){
         let new_produit = new_stock['nom_prod'];
         new_produit = {new_produit};
-        produitService.createOne(new_produit);
+        await produitService.createOne(new_produit);
         produit = await produitService.getByName(new_stock['nom_prod']);
     }
     new_stock['id_prod'] = parseInt(produit[0]['id_prod']);

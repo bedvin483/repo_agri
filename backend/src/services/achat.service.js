@@ -11,6 +11,23 @@ const createOne = async (new_achat={})=>{
     if (cmd.length === 0){
         throw {status:404,message:'commande inexistante'}
     }
+
+    let id_cmd = cmd[0]['id_cmd'];
+    let achat = await getByCommande(id_cmd);
+    let ajout = true;
+    if (achat.length > 0){
+        for (elt of achat){
+            if (elt['id_prod'] == new_achat['id_prod']){
+                ajout = false;
+                new_achat['quantite']= parseInt(new_achat['quantite']) + parseInt(elt['quantite']);
+                break;
+            }
+        }
+    }
+
+    if (new_achat['quantite']<=0){
+        throw {status:403,message:'Quantity must be above zero'};
+    }
     let id_vend = cmd[0]['id_vend']
     let stock = await stockService.getByVend(id_vend);
     let id_prod = 'produit';
@@ -30,13 +47,21 @@ const createOne = async (new_achat={})=>{
     if (pasDeProduit){
         throw{status:404,message:'le vendeur ne vend pas le produit'};
     }
-    await achatModel.create(new_achat);
+    if (ajout){
+        await achatModel.create(new_achat);
+    }
+    else{
+        await changeInfo(new_achat);
+    }
 }
 
 const changeInfo = async (new_info={})=>{
     let {id_cmd,id_prod,quantite} = new_info;
     let new_achat = {quantite};
     let id_cmd_prod = [id_cmd,id_prod];
+    if (new_achat['quantite']<=0){
+        throw {status:403,message:'Quantity must be above zero'};
+    }
     await achatModel.change(id_cmd_prod,new_achat);
 }
 

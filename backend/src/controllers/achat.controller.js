@@ -33,9 +33,9 @@ const changeInfoAchat = async (req,res)=>{
 const deleteAchat = async (req,res)=>{
     try {
         const {id_cmd,id_prod} = req.query;
-        let id = {id_cmd,id_prod}
+        let id = {id_cmd,id_prod};
         await achatService.deleteOne(id);
-        return res.status(204).send()
+        return res.status(204).send();
     } catch (err) {
         return res.status(err.status || 500).json(err.message || err);
     }

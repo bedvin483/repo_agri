@@ -3,7 +3,7 @@ const vendeurService = require('../services/vendeur.service');
 const getAllVendeurs = async (req,res)=>{
     try{
         const vendeurs = await vendeurService.getAll();
-        return res.statu(200).json(vendeurs);
+        return res.status(200).json(vendeurs);
     }
     catch (err) {
         return res.status(err.status || 500).json({message: err.message || err});
