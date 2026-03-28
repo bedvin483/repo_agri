@@ -2,7 +2,10 @@ const commandeService = require('../services/commande.service');
 
 const getCommandeByVend = async (req,res)=>{
     try{
-        let id_vend = parseInt(req.params.id);
+        let id_vend = req.id_vend;
+        if(!id_vend){
+            throw {status:401,message:'token invalide'}
+        }
         const commande = await commandeService.getByVend(id_vend);
         return res.status(200).json(commande);
     }

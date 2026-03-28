@@ -12,7 +12,7 @@ const createOne = async (new_stock={})=>{
         throw {status:404,message:'vendeur inexistant'};
     }
     let produit = await produitService.getByName(new_stock['nom_prod']);
-    if (produit.length===0){
+    if (produit.length == 0){
         let new_produit = new_stock['nom_prod'];
         new_produit = {new_produit};
         await produitService.createOne(new_produit);

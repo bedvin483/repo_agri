@@ -5,6 +5,10 @@ const chiffrer = async (pass)=>{
     return pass_c
 };
 
+const checkPsw = async (pass,psw_chiffrer)=>{
+    const result = await bcrypt.compare(pass,psw_chiffrer);
+    return result;
+}
 
 
-module.exports = {chiffrer}
+module.exports = {chiffrer, checkPsw};

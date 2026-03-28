@@ -12,7 +12,10 @@ const getAllVendeurs = async (req,res)=>{
 
 const getVendeurById = async (req,res)=>{
     try {
-        const id_vend = req.params.id;
+        const id_vend = req.id_vend;
+        if(!id_vend){
+            return res.status(404).json({message: 'vendeur inexistant'})
+        }
         const vendeur = await vendeurService.getById(id_vend);
         return res.status(200).json(vendeur);
     } catch (err) {
@@ -20,11 +23,12 @@ const getVendeurById = async (req,res)=>{
     }
 };
 
-const getVendeurByName = async (req,res)=>{
+const getVendeurByNameAndPsw = async (req,res)=>{
     try {
-        const {nom_vend} = req.query;
-        const vendeur = await vendeurService.getByName(nom_vend);
-        return res.status(200).json(vendeur);
+        const {nom_vend, mdp_vend} = req.query;
+        let nom_psw = {nom_vend, mdp_vend};
+        const token = await vendeurService.getByNameAndPsw(nom_psw);
+        return res.status(200).json({token});
     } catch (err) {
         return res.status(err.status || 500).json({message: err.message || err});
     }
@@ -33,11 +37,10 @@ const getVendeurByName = async (req,res)=>{
 const createVendeur = async (req,res)=>{
     try{
         let vendeur = req.body;
-        await vendeurService.createOne(vendeur);
-        return res.status(201).json({'message': 'vendeur ajouté'});
+        const token = await vendeurService.createOne(vendeur);
+        return res.status(201).json({token: token, message: 'vendeur ajouté'});
     }
     catch (err){
-        console.log(err);
         return res.status(err.status || 500).json({erreur: err.message || err});
     }
 };
@@ -45,8 +48,11 @@ const createVendeur = async (req,res)=>{
 const changeInfoVendeur = async (req,res)=>{
     try{
         let new_info = req.body;
-        let id = parseInt(req.params.id);
-        await vendeurService.changeInfo(id,new_info);
+        let id_vend = req.id_vend;
+        if(!id_vend){
+            return res.status(404).json({message: 'vendeur inexistant'})
+        }
+        await vendeurService.changeInfo(id_vend,new_info);
         return res.status(200).json({'message': 'vendeur modifié'});
     }
     catch (err){
@@ -55,9 +61,12 @@ const changeInfoVendeur = async (req,res)=>{
 };
 
 const deleteVendeur = async (req,res)=>{
-    let id = parseInt(req.params.id)
     try{
-        await vendeurService.deleteOne(id);
+        let id_vend = req.id_vend;
+        if(!id_vend){
+            return res.status(404).json({message: 'vendeur inexistant'})
+        }
+        await vendeurService.deleteOne(id_vend);
         return res.send(204).send();
     }
     catch (err){
@@ -65,4 +74,4 @@ const deleteVendeur = async (req,res)=>{
     }
 };
 
-module.exports = {getAllVendeurs, getVendeurById, getVendeurByName, createVendeur, changeInfoVendeur, deleteVendeur};
+module.exports = {getAllVendeurs, getVendeurById, getVendeurByNameAndPsw, createVendeur, changeInfoVendeur, deleteVendeur};

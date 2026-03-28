@@ -1,6 +1,6 @@
 const vendeurModel = require('../models/vendeur.model');
 const psw = require('../utils/psw.manage');
-
+const createJwt = require('../utils/createJwt');
 
 const getAll = async ()=>{
     return await vendeurModel.findAll()
@@ -13,6 +13,22 @@ const getById = async (id_vend=0)=>{
 const getByName = async (nom_vend='')=>{
     return await vendeurModel.findByName(nom_vend);
 }
+
+const getByNameAndPsw = async(nom_psw = {})=>{
+    const {nom_vend,mdp_vend} = nom_psw;
+    let vendeur = await getByName(nom_vend);
+    if (vendeur.length === 0){
+        throw {status:400,message:`${nom_vend} n'existe pas`};
+    }
+    let vend = vendeur[0];
+    const getAccess = await psw.checkPsw(mdp_vend,vend['mdp_vend']);
+    if (!getAccess){
+        throw {status:400,message:'mot de passe incorrect'};
+    }
+    const token = await createJwt({id_vend: vend['id_vend']});
+    return token;
+}
+
 const createOne = async (vendeur={})=>{
     let nom_vend = vendeur['nom_vend'];
     let vend = await getByName(nom_vend);
@@ -24,6 +40,9 @@ const createOne = async (vendeur={})=>{
         }
         try{
             await vendeurModel.create(vendeur);
+            let vend = await getByName(nom_vend);
+            let id_vend = vend[0]['id_vend'];
+            return await createJwt({'id_vend': id_vend});
         }
         catch(err){
             throw err;
@@ -48,4 +67,4 @@ const deleteOne = async (id_vend=0)=>{
     await vendeurModel.remove(id_vend);
 };
 
-module.exports = {getAll, getById, getByName, deleteOne, createOne, changeInfo};
+module.exports = {getAll, getById, getByName, getByNameAndPsw, deleteOne, createOne, changeInfo};
