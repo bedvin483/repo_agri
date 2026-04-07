@@ -13,6 +13,20 @@ const getById = async (id_ach=0)=>{
     return await acheteurModel.findById(id_ach);
 };
 
+const getByNameAndPsw = async(nom_psw = {})=>{
+    const {nom_ach,mdp_ach} = nom_psw;
+    let acheteur = await getByName(nom_ach);
+    if (acheteur.length === 0){
+        throw {status:400,message:`${nom_ach} n'existe pas`};
+    }
+    let ach = acheteur[0];
+    const getAccess = await psw.checkPsw(mdp_ach,ach['mdp_ach']);
+    if (!getAccess){
+        throw {status:400,message:'mot de passe incorrect'};
+    }
+    const token = await createJwt({id_ach: ach['id_ach']});
+    return token;
+}
 const createOne = async (acheteur={})=>{
     let nom_ach = acheteur['nom_ach'];
     let ach = await getByName(nom_ach);
@@ -24,6 +38,9 @@ const createOne = async (acheteur={})=>{
         }
         try {
             await acheteurModel.create(acheteur);
+            let ach = await getByName(nom_ach);
+            let id_ach = ach[0]['id_vend'];
+            return await createJwt({'id_ach': id_ach});
         } catch (err) {
             throw err;
         }
@@ -45,4 +62,4 @@ const deleteOne = async (id=0)=>{
     await acheteurModel.remove(id);
 };
 
-module.exports = {getAll, getById, getByName, deleteOne, createOne, changeInfo};
+module.exports = {getAll, getById, getByName, getByNameAndPsw, deleteOne, createOne, changeInfo};

@@ -1,12 +1,13 @@
 const express = require('express');
+const authAcheteur = require('../middlewares/authAcheteur.middleware');
 const router = express.Router();
 
 const acheteurController = require('../controllers/acheteur.controller');
 
-router.get('/',acheteurController.getAllAcheteurs);
-router.get('/ach',acheteurController.getAcheteurByname);
+router.get('/',authAcheteur,acheteurController.getAcheteurById);
+router.get('/ach',acheteurController.getAcheteurByNameAndPsw);
 router.post('/',acheteurController.createAcheteur);
-router.put('/:id',acheteurController.changeInfoAcheteur);
-router.delete('/:id',acheteurController.deleteAcheteur);
+router.put('/',authAcheteur,acheteurController.changeInfoAcheteur);
+router.delete('/',authAcheteur,acheteurController.deleteAcheteur);
 
 module.exports = router

@@ -4,7 +4,7 @@ const getCommandeByVend = async (req,res)=>{
     try{
         let id_vend = req.id_vend;
         if(!id_vend){
-            throw {status:401,message:'token invalide'}
+            throw {status:401,message:'playload invalide'}
         }
         const commande = await commandeService.getByVend(id_vend);
         return res.status(200).json(commande);
@@ -16,7 +16,10 @@ const getCommandeByVend = async (req,res)=>{
 
 const getCommandeByAch = async (req,res)=>{
     try {
-        let id_ach = parseInt(req.params.id);
+        let id_ach = req.id_ach;
+        if(!id_ach){
+            throw {status:401,message:'playload invalide'}
+        }
         const commande = await commandeService.getByAch(id_ach);
         return res.status(200).json(commande);
     } catch (err) {
@@ -27,6 +30,10 @@ const getCommandeByAch = async (req,res)=>{
 const createCommande = async (req,res)=>{
     try {
         let new_commande = req.body;
+        new_commande['id_ach'] = req.id_ach;
+        if (!new_commande['id_ach']){
+            throw {status:401,message: 'playload invalide'};
+        }
         await commandeService.createOne(new_commande);
         return res.status(201).json({message: 'commande ajouté'});
     } catch (err) {
