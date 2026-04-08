@@ -1,5 +1,7 @@
 const acheteurModel = require('../models/acheteur.model');
 const psw = require('../utils/psw.manage');
+const createJwt = require('../utils/createJwt');
+
 
 const getAll = async ()=>{
     return await acheteurModel.findAll()
