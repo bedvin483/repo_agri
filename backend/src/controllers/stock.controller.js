@@ -17,6 +17,8 @@ const createStock = async (req,res)=>{
     try {
         let new_stock = req.body;
         new_stock['id_vend'] = req.id_vend;
+        new_stock['image_prod'] = req.image_prod;
+        console.log(new_stock);
         if(!new_stock['id_vend']){
             throw {status:401,message:'token invalide'}
         }

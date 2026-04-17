@@ -13,10 +13,13 @@ const createOne = async (new_stock={})=>{
     }
     let produit = await produitService.getByName(new_stock['nom_prod']);
     if (produit.length == 0){
-        let new_produit = new_stock['nom_prod'];
-        new_produit = {new_produit};
+        let {nom_prod} = new_stock;
+        let new_produit = {nom_prod};
         await produitService.createOne(new_produit);
-        produit = await produitService.getByName(new_stock['nom_prod']);
+        //produit = await produitService.getByName(new_stock['nom_prod']);
+        while (produit.length == 0) {
+            produit = await produitService.getByName(new_stock['nom_prod']);
+        }
     }
     new_stock['id_prod'] = parseInt(produit[0]['id_prod']);
     let stock_vend = await getByVend(vend[0]['id_vend']);
